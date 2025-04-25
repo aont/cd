@@ -1,5 +1,5 @@
-cd() {
-    local ARGV_SAVE="$@"
+function cd() {
+    local ARGV_SAVE=("$@")
     local opt
     local opt_L=0
     local opt_P=0
@@ -16,7 +16,7 @@ cd() {
             @) opt_at=1 ;;
             r) opt_r=1 ;;
             \?)
-                echo "無効なオプション: -$OPTARG" >&2
+                echo "invalid option: -$OPTARG" >&2
                 return 1
                 ;;
         esac
@@ -27,8 +27,7 @@ cd() {
         cdr
         return
     else
-        builtin cd "$ARGV_SAVE"
-        return
+        builtin cd "${ARGV_SAVE[@]}"
     fi
 }
 function cdr () {
