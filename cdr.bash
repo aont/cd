@@ -1,19 +1,22 @@
-cdr() {
+function cdr () {
+    local CURPWD="$PWD"
+    local DOTGLOB_SAVE="$(shopt -p dotglob)"
     while true; do
-        local DOTGLOB_SAVE="$(shopt -p dotglob)"
-        shopt -s dotglob
-        local DIRLIST="$(echo ..;
+        shopt -s dotglob;
+        local DIRLIST="$(printf .\\n..\\n ;
+        cd "$CURPWD";
         for item in * ; do
                 if [[ -d "$item" ]]; then
                     echo "$item"
                 fi
         done )"
         eval "$DOTGLOB_SAVE"
-        local SELECTED="$(echo "$DIRLIST" | fzf --layout reverse-list --no-sort --header="PWD=$PWD" )"
-        if [[ -z "$SELECTED" ]]; then
+        local SELECTED="$(echo "$DIRLIST" | MSYS2_ARG_CONV_EXCL="*" fzf --layout reverse-list --no-sort --header="PWD=$CURPWD" )"
+        if [[ -z "$SELECTED" || "$SELECTED" == "." ]]; then
+            builtin cd "$CURPWD"
             break
         else
-            builtin cd "$SELECTED"
+            CURPWD="$(cd "$CURPWD"; cd "$SELECTED"; echo "$PWD")"
         fi
     done
 }
