@@ -9,7 +9,7 @@ cdr() {
                 fi
         done )"
         eval "$DOTGLOB_SAVE"
-        local SELECTED="$(echo "$DIRLIST" | fzf --header="PWD=$PWD" )"
+        local SELECTED="$(echo "$DIRLIST" | fzf --layout reverse-list --no-sort --header="PWD=$PWD" )"
         if [[ -z "$SELECTED" ]]; then
             break
         else
