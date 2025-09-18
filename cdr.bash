@@ -8,6 +8,7 @@ function cd() {
     local opt_r=0
     local dir=""
 
+    unset OPTIND
     while getopts ":LPe@r" opt; do
         case "$opt" in
             L) opt_L=1 ;;
@@ -47,7 +48,7 @@ function cdr () {
             echo "$PWD_START"
         )"
         eval "$DOTGLOB_SAVE"
-        local SELECTED="$(echo "$DIRLIST" | MSYS2_ARG_CONV_EXCL="*" fzf --layout reverse-list --no-sort --header="PWD=$CURPWD" )"
+        local SELECTED="$(echo "$DIRLIST" | fzf --layout reverse-list --no-sort --header="PWD=$CURPWD" )"
         if [[ -z "$SELECTED" || "$SELECTED" == "." ]]; then
             builtin cd "$CURPWD"
             break
